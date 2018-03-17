@@ -22,19 +22,6 @@
 int main()
 {
     
-    // file_audit();
-    // lock_files("1111");
-    // backup();
-    // lock_files("0777");
-    // // char * dateBuffer[80];
-    // // char * date = returnDate(dateBuffer);
-    // // printf("\n%s\n", date);
-    // update_website();
-    // // lock_files("0777");
-    // update_website();
-
-
-
     time_t now;
     struct tm newyear;
     double seconds;
