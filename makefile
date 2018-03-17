@@ -1,7 +1,7 @@
 CC = gcc
-objects = main.o backup.o date.o transfer.o file_locking.o fileAudit.o
-headers = backup.h date.h transfer.h file_locking.h fileAudit.h
-files = main.c backup.c date.c transfer.c file_locking.c fileAudit.c
+objects = main.o backup.o date.o transfer.o file_locking.o fileAudit.o client.o
+headers = backup.h date.h transfer.h file_locking.h fileAudit.h client.h
+files = main.c backup.c date.c transfer.c file_locking.c fileAudit.c client.c
 name = p
 
 p : $(objects)
@@ -24,6 +24,9 @@ file_locking.o : file_locking.c
 
 fileAudit.o : fileAudit.c
 	$(CC) -c fileAudit.c
+
+client.o : client.c
+	$(CC) -c client.c
 
 clean:
 	rm $(name) $(objects)

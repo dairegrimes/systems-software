@@ -9,6 +9,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <string.h>
+#include <mqueue.h>
 
 
 #include "transfer.h"
@@ -16,6 +17,7 @@
 #include "date.h"
 #include "file_locking.h"
 #include "fileAudit.h"
+#include "client.h"
 
 #define MAX_BUF 1024
  
@@ -80,6 +82,10 @@ int main()
           int fd;
           char * fifoFile = "tmp/fifoFile";
           char buf[MAX_BUF];
+
+          
+
+          
             
          
           while(1) 
