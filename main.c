@@ -54,7 +54,7 @@ int main()
     if (pid > 0) {
         // if PID > 0 :: this is the parent
         // this process performs printf and finishes
-        printf("Parent process");
+
         sleep(10);  // uncomment to wait 10 seconds before process ends
         exit(EXIT_SUCCESS);
     } else if (pid == 0) {
@@ -100,7 +100,6 @@ int main()
                 sleep(1);
                 
                 fd = open (fifoFile, O_RDONLY);
-
                 read (fd, buf, MAX_BUF);
 
                 if(strcmp(buf, "1") == 0)
@@ -116,8 +115,8 @@ int main()
                     update_website();
                     lock_files("0777");
                 }
-
                 close(fd);
+                
 
                 time(&now);
                 seconds = difftime(now,mktime(&newyear));
