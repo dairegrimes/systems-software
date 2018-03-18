@@ -25,70 +25,80 @@
 int main()
 {
 
-    time_t now;
-    struct tm newyear;
-    double seconds;
-    time(&now);  /* get current time; same as: now = time(NULL)  */
-    newyear = *localtime(&now);
-    newyear.tm_hour = 21; 
-    newyear.tm_min = 23; 
-    newyear.tm_sec = 0;
+  backup();
 
-    char * watchFile = "auditctl -w /var/www/html/ -p rwxa";
-    message_queue("Started auditing");
-    if(system(watchFile) < 0)
-    {
-      message_queue("Could not start auditing");
-      openlog("Audit log", LOG_PID | LOG_CONS, LOG_USER);
-      syslog(LOG_INFO, "Could not start auditing: %s", strerror(errno));
-      closelog();
-    }
+  file_audit();
 
-    /*newyear.tm_mon = 0;  
-    newyear.tm_mday = 1;*/
+    // time_t now;
+    // struct tm newyear;
+    // double seconds;
+    // time(&now);  /* get current time; same as: now = time(NULL)  */
+    // newyear = *localtime(&now);
+    // newyear.tm_hour = 21; 
+    // newyear.tm_min = 23; 
+    // newyear.tm_sec = 0;
 
-    // Implementation for Singleton Pattern if desired (Only one instance running)
+    
+    // char * watchFile = "auditctl -w /var/www/html -p rwxa";
+    
+    // if(system(watchFile) < 0)
+    // {
+    //   message_queue("Could not start auditing");
+    //   openlog("Audit log", LOG_PID | LOG_CONS, LOG_USER);
+    //   syslog(LOG_INFO, "Could not start auditing: %s", strerror(errno));
+    //   closelog();
+    // }
+    // else
+    // {
+    //     message_queue("Started auditing");
+    // }
+    
 
-    // Create a child process      
-    int pid = fork();
+    // /*newyear.tm_mon = 0;  
+    // newyear.tm_mday = 1;*/
+
+    // // Implementation for Singleton Pattern if desired (Only one instance running)
+
+    // // Create a child process      
+    // int pid = fork();
  
-    if (pid > 0) {
-        // if PID > 0 :: this is the parent
-        // this process performs printf and finishes
+    // if (pid > 0) {
+    //     // if PID > 0 :: this is the parent
+    //     // this process performs printf and finishes
 
-        sleep(10);  // uncomment to wait 10 seconds before process ends
-        exit(EXIT_SUCCESS);
-    } else if (pid == 0) {
-       // Step 1: Create the orphan process
-       printf("\nProcess running ...");
+    //     sleep(10);  // uncomment to wait 10 seconds before process ends
+    //     exit(EXIT_SUCCESS);
+    // } else if (pid == 0) {
+    //    // Step 1: Create the orphan process
+    //    printf("\nProcess running ...\n");
        
-       // Step 2: Elevate the orphan process to session leader, to loose controlling TTY
-       // This command runs the process in a new session
-       if (setsid() < 0) { exit(EXIT_FAILURE); }
+    //    // Step 2: Elevate the orphan process to session leader, to loose controlling TTY
+    //    // This command runs the process in a new session
+    //    if (setsid() < 0) { exit(EXIT_FAILURE); }
 
-       // We could fork here again , just to guarantee that the process is not a session leader
-       int pid = fork();
-       if (pid > 0) {
-          exit(EXIT_SUCCESS);
-       } else {
+    //    // We could fork here again , just to guarantee that the process is not a session leader
+    //    int pid = fork();
+    //    if (pid > 0) {
+    //       exit(EXIT_SUCCESS);
+    //    } else {
        
-          // Step 3: call umask() to set the file mode creation mask to 0
-          // This will allow the daemon to read and write files 
-          // with the permissions/access required 
-          umask(0);
+    //       // Step 3: call umask() to set the file mode creation mask to 0
+    //       // This will allow the daemon to read and write files 
+    //       // with the permissions/access required 
+    //       umask(0);
 
-          // Step 4: Change the current working dir to root.
-          // This will eliminate any issues of running on a mounted drive, 
-          // that potentially could be removed etc..
-          if (chdir("/") < 0 ) { exit(EXIT_FAILURE); }
+    //       // Step 4: Change the current working dir to root.
+    //       // This will eliminate any issues of running on a mounted drive, 
+    //       // that potentially could be removed etc..
+    //       if (chdir("/") < 0 ) { exit(EXIT_FAILURE); }
 
-          // Step 5: Close all open file descriptors
-          /* Close all open file descriptors */
-          int x;
-          for (x = sysconf(_SC_OPEN_MAX); x >= 0; x--)
-          {
-             close (x);
-          } 
+    //       // Step 5: Close all open file descriptors
+    //       /* Close all open file descriptors */
+    //       int x;
+    //       for (x = sysconf(_SC_OPEN_MAX); x >= 0; x--)
+    //       {
+    //          close (x);
+    //       } 
 
 
           
@@ -98,49 +108,49 @@ int main()
           
             
          
-          while(1) 
-          {
-                sleep(1);
+    //       while(1) 
+    //       {
+    //             sleep(1);
                 
-                int fd;
-                char * fifoFile = "/tmp/fifoFile";
-                char buf[MAX_BUF] = "";
-                fd = open (fifoFile, O_RDONLY);
+    //             int fd;
+    //             char * fifoFile = "/tmp/fifoFile";
+    //             char buf[MAX_BUF] = "";
+    //             fd = open (fifoFile, O_RDONLY);
 
-                read (fd, buf, MAX_BUF);
+    //             read (fd, buf, MAX_BUF);
 
-                if(strcmp(buf, "1") == 0)
-                {
-                    lock_files("1111");
-                    file_audit();
-                    backup();
-                    lock_files("0777"); 
-                }
+    //             if(strcmp(buf, "1") == 0)
+    //             {
+    //                 lock_files("1111");
+    //                 backup();
+    //                 lock_files("0777"); 
+    //                 file_audit();
+    //             }
 
-                if(strcmp(buf, "2") == 0)
-                {
-                    lock_files("1111");
-                    file_audit();
-                    update_website();
-                    lock_files("0777");
-                }
-                close(fd);
+    //             if(strcmp(buf, "2") == 0)
+    //             {
+    //                 lock_files("1111");
+    //                 update_website();
+    //                 lock_files("0777");
+    //                 file_audit();
+    //             }
+    //             close(fd);
                 
 
-                time(&now);
-                seconds = difftime(now,mktime(&newyear));
+    //             time(&now);
+    //             seconds = difftime(now,mktime(&newyear));
 
-                if (seconds == 0) 
-                {
-                    lock_files("1111");
-                    file_audit();
-                    backup();
-                    update_website();
-                    lock_files("0777");
-                }
-          }
-       }
-    }
+    //             if (seconds == 0) 
+    //             {
+    //                 lock_files("1111");
+    //                 backup();
+    //                 update_website();
+    //                 lock_files("0777");
+    //                 file_audit();
+    //             }
+    //       }
+    //    }
+    // }
  
     return 0;
 }

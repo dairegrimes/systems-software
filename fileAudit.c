@@ -20,17 +20,17 @@ void file_audit()
     char * date = returnDate(dateBuffer);
     char * file = ".txt";
 
-    char * path = "ausearch -f /var/www/html/ > /home/daire/Documents/Assignment1/audit_logs/";
+    char * path = "ausearch -f /var/www/html/ > /home/daire/Documents/Assignment1/accesslog/accesslog.txt";
 
-    int bufferSize = strlen(path) + strlen(file) + strlen(date) + 1;
-    char * buffer = (char *) malloc (bufferSize);
+    // int bufferSize = strlen(path) + strlen(file) + strlen(date) + 1;
+    // char * buffer = (char *) malloc (bufferSize);
 
-    strcpy(buffer, path);
-    strcat(buffer, date);
-    strcat(buffer, file);
+    // strcpy(buffer, path);
+    // strcat(buffer, date);
+    // strcat(buffer, file);
 
 
-    if(system (buffer) < 0)
+    if(system (path) < 0)
     {
         message_queue("Could not audit");
     	openlog("Audit log", LOG_PID | LOG_CONS, LOG_USER);
@@ -39,5 +39,5 @@ void file_audit()
     }
     
     message_queue("Audit Completed");
-    free(buffer);
+    //free(buffer);
 }
