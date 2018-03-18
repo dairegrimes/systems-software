@@ -10,6 +10,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <mqueue.h>
+#include <errno.h>
 
 
 #include "transfer.h"
@@ -32,6 +33,17 @@ int main()
     newyear.tm_hour = 21; 
     newyear.tm_min = 23; 
     newyear.tm_sec = 0;
+
+    char * watchFile = "auditctl -w /var/www/html/ -p rwxa";
+    message_queue("Started auditing");
+    if(system(watchFile) < 0)
+    {
+      message_queue("Could not start auditing");
+      openlog("Audit log", LOG_PID | LOG_CONS, LOG_USER);
+      syslog(LOG_INFO, "Could not start auditing: %s", strerror(errno));
+      closelog();
+    }
+
     /*newyear.tm_mon = 0;  
     newyear.tm_mday = 1;*/
 
