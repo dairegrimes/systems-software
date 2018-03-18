@@ -15,6 +15,7 @@
 #include "backup.h"
 #include "client.h"
 
+
 void backup()
 {
 
@@ -40,7 +41,7 @@ void backup()
     	closelog();
   	}
 
-    
+
     message_queue("Backup Completed");
 	free(buffer);
 
