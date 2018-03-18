@@ -3,6 +3,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include "client.h"
+
 int main(int argc, char *argv[]) 
 {
 	
@@ -15,7 +17,6 @@ int main(int argc, char *argv[])
 	fd = open(fifoFile, O_WRONLY);
 	write(fd, "2", sizeof("2"));
 	close(fd);
-	
 	unlink(fifoFile);
 	
 	return 0;

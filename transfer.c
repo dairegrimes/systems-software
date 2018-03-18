@@ -6,18 +6,26 @@
 #include <syslog.h>
 #include <sys/stat.h>
 #include <time.h>
+#include <errno.h>
 
 #include "transfer.h"
 #include <setjmp.h>
+#include "client.h"
 
  
 void update_website()
 {
-	char * source = "/var/www/html/intranet/";
-	char * dest = "/var/www/html/live";
+
+	char * path = "rsync -r /var/www/html/intranet/ /var/www/html/live";
 
 
-	char * args[] = { "cp", "-R", source, dest ,NULL};
-	execv ("/bin/cp", args);
+  	if (system(path) < 0)
+  	{
+	    openlog("Assignment1", LOG_PID|LOG_CONS, LOG_USER);
+	    syslog(LOG_INFO, "Failed to update %s", strerror(errno));
+	    closelog();
+	}
+
+	message_queue("Transfer Completed");
 }
 

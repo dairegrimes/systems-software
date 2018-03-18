@@ -23,7 +23,7 @@
  
 int main()
 {
-    
+
     time_t now;
     struct tm newyear;
     double seconds;
@@ -79,9 +79,7 @@ int main()
           } 
 
 
-          int fd;
-          char * fifoFile = "tmp/fifoFile";
-          char buf[MAX_BUF];
+          
 
           
 
@@ -92,19 +90,25 @@ int main()
           {
                 sleep(1);
                 
+                int fd;
+                char * fifoFile = "/tmp/fifoFile";
+                char buf[MAX_BUF] = "";
                 fd = open (fifoFile, O_RDONLY);
+
                 read (fd, buf, MAX_BUF);
 
                 if(strcmp(buf, "1") == 0)
                 {
                     lock_files("1111");
+                    file_audit();
                     backup();
-                    lock_files("0777");
+                    lock_files("0777"); 
                 }
 
-                else if(strcmp(buf, "2") == 0)
+                if(strcmp(buf, "2") == 0)
                 {
                     lock_files("1111");
+                    file_audit();
                     update_website();
                     lock_files("0777");
                 }

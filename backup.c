@@ -7,21 +7,42 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <string.h>
+#include <errno.h>
+#include <setjmp.h>
+
 
 #include "date.h"
 #include "backup.h"
+#include "client.h"
 
 void backup()
 {
+
 	char * dateBuffer[80];
     char * date = returnDate(dateBuffer);
 
-    char  source[250] = "/var/www/html/intranet";
-    char  dest[250] = "/home/daire/Documents/Assignment1/backup/";
 
-    strcat (dest, date);
 
-    char * args[] = {"cp", "-R" , source, dest,  NULL };
+    char * path = "cp -R /var/www/html/intranet /home/daire/Documents/Assignment1/backup/";
 
-    execv("/bin/cp", args);
+
+    int bufferSize = strlen(path) + strlen(date) + 1;
+    char * buffer = (char *) malloc (bufferSize);
+
+    strcpy(buffer, path);
+    strcat(buffer, date);
+
+    if (system(buffer) < 0)
+    {
+    	message_queue("Could not backup");
+    	openlog("Assignment log", LOG_PID|LOG_CONS, LOG_USER);
+    	syslog(LOG_INFO, "Could not backup %s", strerror(errno));
+    	closelog();
+  	}
+
+    
+    message_queue("Backup Completed");
+	free(buffer);
+
+
 }

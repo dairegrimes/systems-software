@@ -12,6 +12,7 @@
 #include "date.h"
 #include "backup.h"
 #include "fileAudit.h"
+#include "client.h"
 
 void file_audit()
 {
@@ -24,20 +25,19 @@ void file_audit()
     int bufferSize = strlen(path) + strlen(file) + strlen(date) + 1;
     char * buffer = (char *) malloc (bufferSize);
 
-
     strcpy(buffer, path);
-    
     strcat(buffer, date);
-    
     strcat(buffer, file);
 
-    
 
     if(system (buffer) < 0)
     {
+        message_queue("Could not audit");
     	openlog("Audit log", LOG_PID | LOG_CONS, LOG_USER);
     	syslog(LOG_INFO, "Could not audit: %s", strerror(errno));
     	closelog();
     }
+    
+    message_queue("Audit Completed");
     free(buffer);
 }

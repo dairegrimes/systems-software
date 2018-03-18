@@ -4,7 +4,9 @@
 #include <mqueue.h>
 #include <stdlib.h>
 
-void message_queue(char * message)
+#include "client.h"
+
+void message_queue(char  message[])
 {
 	mqd_t mq;
 
