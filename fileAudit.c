@@ -22,13 +22,6 @@ void file_audit()
 
     char * path = "ausearch -f /var/www/html/ > /home/daire/Documents/Assignment1/accesslog/accesslog.txt";
 
-    // int bufferSize = strlen(path) + strlen(file) + strlen(date) + 1;
-    // char * buffer = (char *) malloc (bufferSize);
-
-    // strcpy(buffer, path);
-    // strcat(buffer, date);
-    // strcat(buffer, file);
-
 
     if(system (path) < 0)
     {
