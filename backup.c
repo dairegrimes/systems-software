@@ -36,13 +36,19 @@ void backup()
     if (system(buffer) < 0)
     {
     	message_queue("Could not backup");
-    	openlog("Assignment log", LOG_PID|LOG_CONS, LOG_USER);
-    	syslog(LOG_INFO, "Could not backup %s", strerror(errno));
-    	closelog();
+    	openlog("Assignment1", LOG_PID|LOG_CONS, LOG_USER);
+        syslog(LOG_INFO, "Could not Backup");
+        closelog();
   	}
 
+    else
+    {
+        openlog("Assignment1", LOG_PID|LOG_CONS, LOG_USER);
+        syslog(LOG_INFO, "Backed up");
+        closelog();
+        message_queue("Backup Completed");
+    }
 
-    message_queue("Backup Completed");
 	free(buffer);
 
 

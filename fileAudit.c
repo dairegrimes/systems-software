@@ -33,11 +33,9 @@ void file_audit()
     if(system (path) < 0)
     {
         message_queue("Could not audit");
-    	openlog("Audit log", LOG_PID | LOG_CONS, LOG_USER);
+    	openlog("Assignment1", LOG_PID | LOG_CONS, LOG_USER);
     	syslog(LOG_INFO, "Could not audit: %s", strerror(errno));
     	closelog();
     }
-    
-    message_queue("Audit Completed");
-    //free(buffer);
+
 }

@@ -41,7 +41,7 @@ int main()
     if(system(watchFile) < 0)
     {
       message_queue("Could not start auditing");
-      openlog("Audit log", LOG_PID | LOG_CONS, LOG_USER);
+      openlog("Assignment1", LOG_PID | LOG_CONS, LOG_USER);
       syslog(LOG_INFO, "Could not start auditing: %s", strerror(errno));
       closelog();
     }
@@ -121,15 +121,17 @@ int main()
                     lock_files("1111");
                     backup();
                     lock_files("0777"); 
-                    
                 }
+
+                close(fd);
+
+                fd = open (fifoFile, O_RDONLY);
 
                 if(strcmp(buf, "2") == 0)
                 {
                     lock_files("1111");
                     update_website();
                     lock_files("0777");
-                    file_audit();
                 }
                 close(fd);
                 
@@ -143,10 +145,10 @@ int main()
                     backup();
                     update_website();
                     lock_files("0777");
-                    
                 }
 
                 file_audit();
+                
           }
        }
     }

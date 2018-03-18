@@ -48,7 +48,7 @@ void lock_files(char type[])
 		}
 		
 		openlog("Audit log", LOG_PID | LOG_CONS, LOG_USER);
-    	syslog(LOG_INFO, "Could not lock files: %s", strerror(errno));
+    	syslog(LOG_INFO, "Could not lock files");
     	closelog();
 	}
 
